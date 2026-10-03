@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>RCS 2027 StereoQueerEval</title>
+<meta name="description" content="Research Case Studies 2027 at Universität Trier: guide to SemEval 2027 Task 8, StereoQueerEval.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;700&family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one narrow reading column under a six-stripe palette banner; sections separated by space, not boxes. */
+:root {
+  --flesh: #ED8E89; --peach: #F7B685; --yellow: #F3EBA5;
+  --journee: #94C691; --aqua: #9BD6D9; --molly: #B4A8E0;
+  --bg: #FCFCFD; --fg: #22212B; --muted: #5E5B6E; --line: #E4E2EC;
+  --soft: #F4F3F8; --link: #5B4BA8;
+  --display: "Familjen Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", Roboto, Arial, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #17161D; --fg: #ECEAF3; --muted: #A6A2B8; --line: #2E2C38;
+    --soft: #201F28; --link: #C3B8F0; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #17161D; --fg: #ECEAF3; --muted: #A6A2B8; --line: #2E2C38;
+  --soft: #201F28; --link: #C3B8F0; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 1rem; line-height: 1.6; }
+.banner { display: grid; grid-template-columns: repeat(6, 1fr); height: 14px; }
+.banner span:nth-child(1) { background: var(--flesh); }
+.banner span:nth-child(2) { background: var(--peach); }
+.banner span:nth-child(3) { background: var(--yellow); }
+.banner span:nth-child(4) { background: var(--journee); }
+.banner span:nth-child(5) { background: var(--aqua); }
+.banner span:nth-child(6) { background: var(--molly); }
+.wrap { max-width: 46rem; margin: 0 auto; padding-inline: 20px; padding-block: 3rem 4rem; }
+header { display: grid; gap: .75rem; padding-bottom: 2rem; border-bottom: 1px solid var(--line); }
+.eyebrow { font-family: var(--mono); font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0; }
+h1 { font-family: var(--display); font-weight: 700; font-size: clamp(2rem, 6vw, 2.9rem); line-height: 1.08; margin: 0; text-wrap: balance; }
+.lead { font-size: 1.1rem; color: var(--muted); margin: 0; max-width: 40rem; }
+.facts { display: flex; flex-wrap: wrap; gap: .5rem; margin: .5rem 0 0; padding: 0; list-style: none; }
+.facts li { font-family: var(--mono); font-size: .8rem; padding: .25rem .6rem; border-radius: 999px; background: var(--soft); border: 1px solid var(--line); }
+nav { display: flex; flex-wrap: wrap; gap: .25rem 1rem; padding-block: 1.25rem; font-size: .9rem; border-bottom: 1px solid var(--line); }
+nav a { color: var(--muted); text-decoration: none; }
+nav a:hover, nav a:focus-visible { color: var(--fg); text-decoration: underline; }
+section { padding-top: 2.75rem; display: grid; gap: .9rem; }
+h2 { font-family: var(--display); font-weight: 700; font-size: 1.55rem; margin: 0; display: flex; align-items: center; gap: .6rem; text-wrap: balance; }
+h2::before { content: ""; width: .7rem; height: .7rem; border-radius: 2px; background: var(--c, var(--molly)); flex: none; }
+h3 { font-family: var(--display); font-weight: 500; font-size: 1.15rem; margin: .6rem 0 0; }
+p, ul, ol { margin: 0; }
+ul, ol { padding-left: 1.25rem; display: grid; gap: .35rem; }
+a { color: var(--link); text-underline-offset: 2px; }
+a:focus-visible, nav a:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; border-radius: 2px; }
+.note { font-size: .9rem; color: var(--muted); }
+.table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; }
+table { width: 100%; border-collapse: collapse; font-size: .94rem; }
+th, td { text-align: left; vertical-align: top; padding: .6rem .8rem; border-bottom: 1px solid var(--line); }
+tr:last-child td { border-bottom: 0; }
+th { font-family: var(--mono); font-weight: 500; font-size: .76rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); background: var(--soft); }
+td.num, .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.subtasks { display: grid; gap: .75rem; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); }
+.subtask { border-top: 4px solid var(--c); padding: .8rem .9rem 1rem; background: var(--soft); border-radius: 0 0 8px 8px; display: grid; gap: .3rem; align-content: start; min-width: 0; }
+.subtask b { font-family: var(--display); font-size: 1.05rem; }
+.subtask .kind { font-family: var(--mono); font-size: .75rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+.callout { border-left: 4px solid var(--flesh); padding: .75rem 1rem; background: var(--soft); border-radius: 0 8px 8px 0; }
+.calc { font-family: var(--mono); font-size: 1.05rem; font-variant-numeric: tabular-nums; }
+footer { margin-top: 3.5rem; padding-top: 1.25rem; border-top: 1px solid var(--line); font-size: .85rem; color: var(--muted); display: grid; gap: .3rem; }
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+html { scroll-behavior: smooth; }
+.topbar { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+.theme-toggle { flex: none; display: inline-grid; place-items: center; width: 2.5rem; height: 2.5rem; border-radius: 999px; border: 1px solid var(--line); background: var(--soft); color: var(--fg); cursor: pointer; transition: background .2s, transform .2s; }
+.theme-toggle:hover { transform: rotate(-12deg); }
+.theme-toggle:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+.theme-toggle svg { width: 1.2rem; height: 1.2rem; }
+.theme-toggle .sun { display: none; color: var(--peach); }
+.theme-toggle .moon { color: var(--molly); }
+:root[data-theme="dark"] .theme-toggle .sun { display: block; }
+:root[data-theme="dark"] .theme-toggle .moon { display: none; }
+@media (prefers-reduced-motion: reduce) { .theme-toggle { transition: none; } .theme-toggle:hover { transform: none; } }
+</style>
+
+</head>
+<body>
+<div class="banner" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+
+<main class="wrap">
+  <header>
+    <div class="topbar">
+      <p class="eyebrow">Universität Trier · M.Sc. Natural Language Processing · Winter term 2026/27</p>
+      <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Switch to night mode" title="Switch to night mode">
+        <svg class="moon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="currentColor"/><path d="M12 1.5v2.5M12 20v2.5M1.5 12H4M20 12h2.5M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/></svg>
+      </button>
+    </div>
+    <h1>Research Case Studies 2027: StereoQueerEval</h1>
+    <p class="lead">This semester the group takes part in SemEval 2027 Task 8, building systems that detect stereotypes and hate speech against LGBTQIA+ people, and writes a system description paper.</p>
+    <ul class="facts">
+      <li>Module 4 · 15 LP · 4 SWS</li>
+      <li>Portfolio examination</li>
+      <li>8–9 students</li>
+    </ul>
+  </header>
+
+  <nav aria-label="Sections">
+    <a href="#course">Course</a>
+    <a href="#task">The task</a>
+    <a href="#timeline">Timeline</a>
+    <a href="#participate">How to participate</a>
+    <a href="#workload">ECTS and workload</a>
+    <a href="#meetings">Weekly meetings</a>
+    <a href="#assessment">Assessment</a>
+    <a href="#deductions">Point reductions</a>
+    <a href="#rules">Examination rules</a>
+    <a href="#contact">Contact</a>
+  </nav>
+
+  <section id="course" style="--c: var(--flesh)">
+    <h2>The course</h2>
+    <p>Research Case Studies is a compulsory 15 LP project module of the M.Sc. Natural Language Processing, recommended for the 3rd semester. There are no prerequisites. This year the whole group works on one real research problem, a SemEval shared task, from the first baseline to a peer-reviewed system paper.</p>
+    <ul>
+      <li><strong>Supervision:</strong> Iftakharul Islam (co-supervisor)</li>
+      <li><strong>Group:</strong> 8 to 9 students, organised in small teams</li>
+      <li><strong>Goal:</strong> official runs in the January 2027 evaluation window and a submitted system description paper in February 2027</li>
+      <li><strong>Registration deadline:</strong> <span class="mono">31 December 2026</span>. Missing it results in 5.0, and there is no submission in the summer semester.</li>
+    </ul>
+  </section>
+
+  <section id="task" style="--c: var(--peach)">
+    <h2>The shared task</h2>
+    <p><a href="https://stereoqueereval.github.io/">StereoQueerEval</a> is Task 8 of <a href="https://semeval.github.io/SemEval2027/tasks">SemEval 2027</a>, in the track Stereotypes, Framing, and Sentiment Analysis. Systems classify YouTube comments, using the video title and description as context.</p>
+    <div class="subtasks">
+      <div class="subtask" style="--c: var(--flesh)">
+        <span class="kind">Subtask A · binary</span>
+        <b>Stereotype detection</b>
+        <span>Does the comment contain a stereotype about LGBTQIA+ people?</span>
+      </div>
+      <div class="subtask" style="--c: var(--journee)">
+        <span class="kind">Subtask B · multiclass</span>
+        <b>Hate speech classification</b>
+        <span>Explicit hate, implicit hate, or non-hateful and supportive content.</span>
+      </div>
+      <div class="subtask" style="--c: var(--molly)">
+        <span class="kind">Subtask C · multilabel</span>
+        <b>Target and identity</b>
+        <span>For hateful comments only: the target type (individual or group) and the LGBTQIA+ identities referenced.</span>
+      </div>
+    </div>
+    <p><strong>Languages:</strong> English, Italian and Dutch, plus Persian as a low-resource language that appears only in the test data.</p>
+    <p class="note">Organisers: Alessandra Teresa Cignarella, Marzieh Abdolmaleki and Els Lefever (Ghent University), Greta Damo (Université Côte d'Azur), Marta Marchiori Manerba (University of Turin) and Debora Nozza (Bocconi University). Full description: <a href="https://stereoqueereval.github.io/stereoqueereval/">task page</a>. The data contains offensive language.</p>
+  </section>
+
+  <section id="timeline" style="--c: var(--yellow)">
+    <h2>Timeline</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Date</th><th>Milestone</th></tr></thead>
+        <tbody>
+          <tr><td class="num">18 Sep 2026</td><td>Training data available</td></tr>
+          <tr><td class="num">31 Dec 2026</td><td>Course: portfolio examination registration deadline</td></tr>
+          <tr><td class="num">10 Jan 2027</td><td>Test data released, evaluation period starts</td></tr>
+          <tr><td class="num">31 Jan 2027</td><td>Evaluation period ends</td></tr>
+          <tr><td class="num">Feb 2027</td><td>System description paper due</td></tr>
+          <tr><td class="num">Mar 2027</td><td>Notification to authors</td></tr>
+          <tr><td class="num">Apr 2027</td><td>Camera-ready paper due</td></tr>
+          <tr><td class="num">Jul 2027</td><td>SemEval 2027 workshop, co-located with a *CL conference</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Task dates from the <a href="https://stereoqueereval.github.io/important_dates">official schedule</a>; check it for updates.</p>
+  </section>
+
+  <section id="participate" style="--c: var(--journee)">
+    <h2>How to participate</h2>
+    <p>We take part in the shared task as one group. The class registers and submits as a single team, so not everyone needs to register or submit individually; the steps below are done once for the group.</p>
+    <ol>
+      <li>Sign the <a href="https://docs.google.com/forms/d/e/1FAIpQLSdhFf10vC6pQk5n4l7vFwHwTS2CIecfHCcDKOkhnvdhHAglHw/viewform">Data Usage Agreement</a>. Within 24 hours you are added to the StereoQueerEval Google Group and receive the password for the data archive.</li>
+      <li>Download the data and annotation guidelines from the <a href="https://github.com/StereoQueerEval/StereoQueerEval_Shared_Task">StereoQueerEval GitHub repository</a>.</li>
+      <li>Build and evaluate your system on the training data, and report progress every week.</li>
+      <li>Submit your predictions on Codabench during the evaluation period (the competition link will be announced by the organisers).</li>
+      <li>Write the system description paper: your approach, the algorithms, models and resources used, your experiments, and an analysis of the results.</li>
+    </ol>
+    <p class="note">Details: <a href="https://stereoqueereval.github.io/how_to_participate">how to participate</a>. Updates from the organisers arrive through the Google Group.</p>
+  </section>
+
+  <section id="workload" style="--c: var(--aqua)">
+    <h2>ECTS and workload</h2>
+    <p>In the German system, one ECTS credit (Leistungspunkt, LP) stands for 25 to 30 hours of total student work. A full-time semester is 30 LP. Workload includes meetings, reading, implementation, experiments, writing and exam preparation, not only contact hours.</p>
+    <p class="calc">15 LP × 25–30 h = 375–450 hours</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Spread over</th><th>Hours per week</th></tr></thead>
+        <tbody>
+          <tr><td>16 weeks (lecture period and evaluation window)</td><td class="num">about 23–28 h</td></tr>
+          <tr><td>20 weeks (until the February paper deadline)</td><td class="num">about 19–23 h</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Sources: <a href="https://www.hrk-nexus.de/themen/studienqualitaet/ects-und-kreditpunkte/module-ects-punkte-und-workload/">HRK nexus on ECTS workload</a>; Universität Trier APO § 5 (2).</p>
+  </section>
+
+  <section id="meetings" style="--c: var(--molly)">
+    <h2>Weekly progress meetings</h2>
+    <p>The whole group meets with the supervisor once a week. Each team shows what it did since the last meeting, what it found, and what comes next. Meeting times will be announced.</p>
+    <p>Research Case Studies is a project seminar, so attendance is compulsory. Regular participation is still certified if you miss up to three sessions, and no more than six teaching hours, in the semester (APO § 5 (5)). If you cannot attend, tell the supervisor in advance.</p>
+  </section>
+
+  <section id="assessment" style="--c: var(--flesh)">
+    <h2>Assessment: the portfolio</h2>
+    <p>The module is assessed only by a portfolio examination (Portfolioprüfung).</p>
+    <ul>
+      <li><strong>Content:</strong> an introduction, a collection of documents covering the whole module period (code, experiment logs, progress reports, the paper), and a reflection.</li>
+      <li><strong>Time:</strong> four weeks to select and compile the documents and write the introduction and reflection.</li>
+      <li><strong>Declaration:</strong> a signed statement that you compiled the portfolio yourself and used no sources or aids other than those stated.</li>
+      <li><strong>Submission:</strong> digital submission (for example as a presentation) is possible with the examiner's prior consent.</li>
+      <li><strong>Registration:</strong> binding, in the campus management system - PORTA, by <span class="mono">31 December 2026</span>.</li>
+    </ul>
+  </section>
+
+  <section id="deductions" style="--c: var(--peach)">
+    <h2>Where points can be reduced</h2>
+    <h3>Under the examination regulations</h3>
+    <ol>
+      <li>Plagiarism, undeclared AI-generated text or code, or any other deception: the assessment is graded 5.0 (APO § 18 (4)). A second proven case can lead to loss of enrolment.</li>
+      <li>Not registering by 31 December 2026: graded 5.0, with no submission in the summer semester.</li>
+      <li>Missing a graded deliverable without a valid reason: graded 5.0 (APO § 18 (1)).</li>
+      <li>Missing more than three sessions or six hours of the project seminar: regular participation is not certified (APO § 5 (5)).</li>
+      <li>Not reporting illness or another valid reason immediately and in writing, with a medical certificate for illness: the absence counts as unexcused (APO § 18 (2)).</li>
+      <li>Submitting the portfolio after the deadline without an approved extension: treated as not submitted.</li>
+    </ol>
+    <h3>Course rules</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Reason</th><th>Reduction</th></tr></thead>
+        <tbody>
+          <tr><td>No visible progress in a week (no commits, results or notes)</td><td class="num">2 points per week</td></tr>
+          <tr><td>Missing an internal milestone, such as the baseline or the first Codabench submission</td><td class="num">5 points</td></tr>
+          <tr><td>No official runs in the evaluation period (10 to 31 Jan 2027)</td><td class="num">10 points</td></tr>
+          <tr><td>No contribution to the system description paper by the internal deadline</td><td class="num">10 points</td></tr>
+          <tr><td>Clearly unequal contribution within a team, shown by logs or peer review</td><td>Individual reduction</td></tr>
+          <tr><td>Breaking the Data Usage Agreement, for example sharing data outside the course</td><td>Graded 5.0</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Point values refer to a 100-point portfolio.</p>
+  </section>
+
+  <section id="rules" style="--c: var(--journee)">
+    <h2>Examination rules at a glance</h2>
+    <ul>
+      <li><strong>Grades:</strong> 1.0 to 4.0 is a pass and 5.0 is a fail. Module grades keep only the first decimal, without rounding (§ 16).</li>
+      <li><strong>Repeats:</strong> a failed module exam can be repeated up to twice, within six semesters. Failing the last repeat means the Master's examination is definitively failed (§ 17).</li>
+      <li><strong>Deregistration:</strong> possible until 24:00 the day before the examination, without giving reasons (§ 11 (6)).</li>
+      <li><strong>Disruption:</strong> a student who disrupts an examination can be excluded, and the assessment counts as 5.0 (§ 18 (4)).</li>
+      <li><strong>Review:</strong> within four weeks you can ask the Examination Committee to review a decision on deception or disruption (§ 18 (5)).</li>
+      <li><strong>Accommodations:</strong> students with disabilities, chronic illness, children or care duties can apply to the chair of the Examination Committee (§ 3 (6)).</li>
+      <li><strong>Inspection:</strong> apply in writing to the examiner within one year of the result (§ 22).</li>
+    </ul>
+    <p class="note">Binding text: <a href="https://www.uni-trier.de/fileadmin/studium/STUDIENVERLAUFSINFOS/ORDNUNGEN/PruefungsO/2-MA/APO_MA/APO_MA_2007/13_LF_APO_2007_MA_2025-08-01_EN.pdf">General Examination Regulations for the Master's Degree Programmes at Trier University</a> (12 November 2007, as amended 1 August 2025), and the subject regulations for the M.Sc. Natural Language Processing. If this page and the regulations differ, the regulations apply.</p>
+  </section>
+
+  <section id="contact" style="--c: var(--aqua)">
+    <h2>Contact</h2>
+    <p>Iftakharul Islam, in the weekly meeting or by e-mail at <span class="mono">s2ifisla@uni-trier.de</span></p>
+  </section>
+
+  <footer>
+    <span>Research Case Studies · Universität Trier · Winter term 2026/27</span>
+    <span>Last updated October 2026</span>
+  </footer>
+</main>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var btn = document.getElementById('theme-toggle');
+  var stored = null;
+  try { stored = localStorage.getItem('rcs-theme'); } catch (e) {}
+  var systemDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  function apply(theme) {
+    root.setAttribute('data-theme', theme);
+    var label = theme === 'dark' ? 'Switch to day mode' : 'Switch to night mode';
+    btn.setAttribute('aria-label', label);
+    btn.setAttribute('title', label);
+  }
+  apply(stored === 'dark' || stored === 'light' ? stored : (systemDark ? 'dark' : 'light'));
+  btn.addEventListener('click', function () {
+    var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    apply(next);
+    try { localStorage.setItem('rcs-theme', next); } catch (e) {}
+  });
+})();
+</script>
+</body>
+</html>
